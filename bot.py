@@ -8,6 +8,7 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
+from aiogram.dispatcher.middlewares import BaseMiddleware
 
 # Токен вашего бота
 API_TOKEN = os.getenv("API_TOKEN")
@@ -23,7 +24,7 @@ dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
 # Добавляем кастомный middleware для логирования всех обновлений
-class UpdateLoggingMiddleware:
+class UpdateLoggingMiddleware(BaseMiddleware):
     async def on_process_message(self, message, data):
         logging.info(f"[Middleware] Обрабатывается сообщение: message_id={message.message_id}, "
                     f"from_user={message.from_user.id if message.from_user else None}, "
