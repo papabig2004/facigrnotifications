@@ -22,6 +22,16 @@ Bot.set_current(bot)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
+# Добавляем кастомный middleware для логирования всех обновлений
+class UpdateLoggingMiddleware:
+    async def on_process_message(self, message, data):
+        logging.info(f"[Middleware] Обрабатывается сообщение: message_id={message.message_id}, "
+                    f"from_user={message.from_user.id if message.from_user else None}, "
+                    f"is_bot={message.from_user.is_bot if message.from_user else None}")
+        return data
+
+dp.middleware.setup(UpdateLoggingMiddleware())
+
 # Команда start
 @dp.message_handler(commands=['start'])
 async def start(message: types.Message):
@@ -160,6 +170,16 @@ async def webhook_handler(request):
         update_data = await request.json()
         update = types.Update(**update_data)
         
+        # Логируем полученное обновление
+        if update.message:
+            logging.info(f"[webhook_handler] Получено обновление с сообщением: message_id={update.message.message_id}, "
+                        f"from_user={update.message.from_user.id if update.message.from_user else None}, "
+                        f"is_bot={update.message.from_user.is_bot if update.message.from_user else None}")
+        elif update.callback_query:
+            logging.info(f"[webhook_handler] Получено обновление с callback_query: data={update.callback_query.data}")
+        else:
+            logging.info(f"[webhook_handler] Получено обновление другого типа: {type(update)}")
+        
         # Устанавливаем текущий экземпляр бота в контекст (нужно для aiogram 2.x)
         # Это должно быть сделано перед обработкой обновления в каждом запросе
         Bot.set_current(bot)
@@ -167,6 +187,7 @@ async def webhook_handler(request):
         # Обрабатываем обновление
         await dp.process_update(update)
         
+        logging.info(f"[webhook_handler] Обновление обработано успешно")
         return web.Response(text='{"ok":true}')
     except Exception as e:
         logging.error(f"Ошибка при обработке webhook: {e}")
