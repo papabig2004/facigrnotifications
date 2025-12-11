@@ -3,6 +3,7 @@ import logging
 import threading
 import asyncio
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from aiohttp import web
 from aiogram import Bot, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -10,12 +11,15 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 API_TOKEN = os.getenv("API_TOKEN")
 # ID чата для проверки сообщений
 CHAT_ID = int(os.getenv("CHAT_ID", "447824223"))
+# URL для webhook (должен быть установлен в Render)
+WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
 
 # Инициализация бота
 bot = Bot(token=API_TOKEN)
+Bot.set_current(bot)  # Нужно для aiogram 2.x
 
 # Множество для отслеживания обработанных сообщений
 processed_messages = set()
@@ -122,71 +126,85 @@ async def process_callback_query(callback_query):
         logging.error(f"Ошибка при обработке кнопки для сообщения {message_id}: {e}")
         await bot.answer_callback_query(callback_query.id, text="Ошибка при обработке", show_alert=True)
 
-async def check_messages():
-    """Главный цикл: получает обновления и обрабатывает их"""
-    last_update_id = 0
-    
-    while True:
-        try:
-            # Получаем обновления
-            updates = await bot.get_updates(offset=last_update_id + 1, limit=100, timeout=10)
-            
-            for update in updates:
-                # Обновляем последний обработанный update_id
-                if update.update_id > last_update_id:
-                    last_update_id = update.update_id
-                
-                # Обрабатываем сообщения
-                if update.message:
-                    # Проверяем только сообщения в нужном чате
-                    if update.message.chat.id == CHAT_ID:
-                        await process_message(update.message)
-                
-                # Обрабатываем нажатия на кнопки
-                elif update.callback_query:
-                    if update.callback_query.data.startswith('done_'):
-                        await process_callback_query(update.callback_query)
-                
-        except Exception as e:
-            logging.error(f"Ошибка в главном цикле: {e}")
-            await asyncio.sleep(5)
+# HTTP-сервер для webhook и health check
+async def health_check(request):
+    """Health check endpoint для Render"""
+    return web.Response(text="OK")
 
-# Простой HTTP-сервер для health check (нужен для Render Web Service)
-class HealthCheckHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/plain')
-        self.end_headers()
-        self.wfile.write(b'OK')
-    
-    def log_message(self, format, *args):
-        pass
+async def webhook_handler(request):
+    """Обработчик webhook от Telegram"""
+    try:
+        update_data = await request.json()
+        update = types.Update(**update_data)
+        
+        # Устанавливаем бота в контекст
+        Bot.set_current(bot)
+        
+        # Обрабатываем сообщения
+        if update.message:
+            if update.message.chat.id == CHAT_ID:
+                await process_message(update.message)
+        
+        # Обрабатываем нажатия на кнопки
+        elif update.callback_query:
+            if update.callback_query.data.startswith('done_'):
+                await process_callback_query(update.callback_query)
+        
+        return web.Response(text='{"ok":true}')
+    except Exception as e:
+        logging.error(f"Ошибка при обработке webhook: {e}")
+        import traceback
+        logging.error(traceback.format_exc())
+        return web.Response(text='{"ok":false}', status=500)
 
-def start_health_server():
-    """Запускает простой HTTP-сервер для health check"""
+def create_app():
+    """Создает aiohttp приложение"""
+    app = web.Application()
+    app.router.add_get('/', health_check)
+    app.router.add_get('/health', health_check)
+    app.router.add_post('/webhook', webhook_handler)
+    return app
+
+async def main():
+    """Главная функция"""
+    if not WEBHOOK_URL:
+        logging.error("WEBHOOK_URL не установлен! Установите переменную окружения WEBHOOK_URL в Render.")
+        logging.error("Например: https://your-service.onrender.com")
+        return
+    
+    # Удаляем существующий webhook перед установкой нового
+    try:
+        webhook_info = await bot.get_webhook_info()
+        if webhook_info.url:
+            logging.info(f"Найден активный webhook: {webhook_info.url}. Удаляем...")
+            await bot.delete_webhook()
+            logging.info("Webhook удален успешно")
+    except Exception as e:
+        logging.warning(f"Ошибка при проверке/удалении webhook: {e}")
+    
+    # Устанавливаем webhook
+    webhook_path = f"{WEBHOOK_URL}/webhook"
+    await bot.set_webhook(webhook_path)
+    logging.info(f"Webhook установлен: {webhook_path}")
+    
+    # Запускаем HTTP-сервер
+    app = create_app()
     port = int(os.getenv('PORT', 10000))
-    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
-    logging.info(f"Health check server started on port {port}")
-    server.serve_forever()
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', port)
+    await site.start()
+    logging.info(f"HTTP-сервер запущен на порту {port}")
+    logging.info("Бот готов к работе. Ожидаю обновления через webhook...")
+    
+    # Держим программу запущенной
+    try:
+        while True:
+            await asyncio.sleep(3600)
+    except KeyboardInterrupt:
+        logging.info("Остановка бота...")
+        await bot.delete_webhook()
+        await runner.cleanup()
 
 if __name__ == '__main__':
-    # Удаляем существующий webhook
-    async def delete_existing_webhook():
-        try:
-            webhook_info = await bot.get_webhook_info()
-            if webhook_info.url:
-                logging.info(f"Найден активный webhook: {webhook_info.url}. Удаляем...")
-                await bot.delete_webhook()
-                logging.info("Webhook удален успешно")
-        except Exception as e:
-            logging.warning(f"Ошибка при проверке/удалении webhook: {e}")
-    
-    asyncio.run(delete_existing_webhook())
-    
-    # Запускаем health check сервер в фоне
-    health_thread = threading.Thread(target=start_health_server, daemon=True)
-    health_thread.start()
-    
-    # Запускаем главный цикл проверки сообщений
-    logging.info("Бот запущен. Проверяю сообщения в чате...")
-    asyncio.run(check_messages())
+    asyncio.run(main())
