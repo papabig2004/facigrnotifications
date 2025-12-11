@@ -1,5 +1,7 @@
 import os
 import logging
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils import executor
@@ -44,6 +46,28 @@ async def process_done(callback_query: types.CallbackQuery):
     # Уведомление о нажатии
     await callback_query.answer("Сообщение помечено как обработано!")
 
+# Простой HTTP-сервер для health check (нужен для Render Web Service)
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/plain')
+        self.end_headers()
+        self.wfile.write(b'OK')
+    
+    def log_message(self, format, *args):
+        pass  # Отключаем логирование HTTP-запросов
+
+def start_health_server():
+    """Запускает простой HTTP-сервер для health check"""
+    port = int(os.getenv('PORT', 10000))
+    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
+    logging.info(f"Health check server started on port {port}")
+    server.serve_forever()
+
 if __name__ == '__main__':
+    # Запускаем health check сервер в фоне
+    health_thread = threading.Thread(target=start_health_server, daemon=True)
+    health_thread.start()
+    
     # Запуск бота
     executor.start_polling(dp, skip_updates=True)
