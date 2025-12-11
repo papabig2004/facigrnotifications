@@ -17,6 +17,8 @@ logging.basicConfig(level=logging.INFO)
 
 # Инициализация бота и диспетчера
 bot = Bot(token=API_TOKEN)
+# Устанавливаем бота в контекст глобально (нужно для aiogram 2.x при использовании webhook)
+Bot.set_current(bot)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
@@ -52,22 +54,24 @@ async def handle_message(message: types.Message):
         return
     
     # Создаем кнопку "Обработано"
+    # Используем message_id исходного сообщения в callback_data
     markup = InlineKeyboardMarkup()
     markup.add(InlineKeyboardButton("Обработано", callback_data=f"done_{message.message_id}"))
     
     logging.info(f"Создана кнопка для сообщения {message.message_id}")
     
-    # Сначала пытаемся отредактировать исходное сообщение (если оно от бота)
+    # ВСЕГДА пытаемся отредактировать исходное сообщение (от Bitrix)
+    # Bitrix отправляет сообщения от имени бота, поэтому бот может их редактировать
     try:
         if message.text:
-            # Для текстовых сообщений
+            # Для текстовых сообщений - редактируем исходное сообщение, добавляя кнопку
             await bot.edit_message_text(
-                message_text,
+                message_text,  # Текст остается тот же, только добавляется кнопка
                 chat_id=message.chat.id,
                 message_id=message.message_id,
                 reply_markup=markup
             )
-            logging.info(f"Успешно отредактировано исходное сообщение {message.message_id}")
+            logging.info(f"Успешно отредактировано исходное сообщение {message.message_id}, добавлена кнопка")
         elif message.caption:
             # Для сообщений с подписью
             await bot.edit_message_caption(
@@ -76,50 +80,33 @@ async def handle_message(message: types.Message):
                 caption=message_text,
                 reply_markup=markup
             )
-            logging.info(f"Успешно отредактирована подпись сообщения {message.message_id}")
+            logging.info(f"Успешно отредактирована подпись сообщения {message.message_id}, добавлена кнопка")
     except Exception as e:
-        # Если не удалось отредактировать (сообщение не от бота или другая ошибка),
-        # отправляем новое сообщение с кнопкой
+        # Если не удалось отредактировать (редкий случай - сообщение не от бота),
+        # отправляем новое сообщение с кнопкой как fallback
         logging.warning(f"Не удалось отредактировать сообщение {message.message_id}: {e}. Отправляем новое сообщение.")
         sent_message = await message.answer(message_text, reply_markup=markup)
-        
-        # Обновляем callback_data с правильным message_id нового сообщения
-        markup_updated = InlineKeyboardMarkup()
-        markup_updated.add(InlineKeyboardButton("Обработано", callback_data=f"done_{sent_message.message_id}"))
-        
-        try:
-            if sent_message.text:
-                await bot.edit_message_text(
-                    message_text,
-                    chat_id=sent_message.chat.id,
-                    message_id=sent_message.message_id,
-                    reply_markup=markup_updated
-                )
-        except Exception as e2:
-            logging.warning(f"Не удалось обновить callback_data нового сообщения: {e2}")
+        logging.info(f"Отправлено новое сообщение {sent_message.message_id} с кнопкой")
 
 # Обработчик нажатия на кнопку
 @dp.callback_query_handler(lambda c: c.data.startswith('done_'))
 async def process_done(callback_query: types.CallbackQuery):
     chat_id = callback_query.message.chat.id
-    message_id = callback_query.message.message_id
+    message_id = callback_query.message.message_id  # Сообщение, на котором была кнопка
     
-    # Получаем исходный message_id из callback_data (может быть исходное или новое сообщение)
-    try:
-        original_message_id = int(callback_query.data.split('_')[1])
-    except (ValueError, IndexError):
-        original_message_id = message_id
-    
-    # Получаем текст сообщения с кнопкой
+    # Получаем текст сообщения (то, на котором была кнопка)
     original_text = callback_query.message.text or callback_query.message.caption or ""
     
-    # Добавляем галочку в конец текста, если её еще нет
-    if not original_text.endswith(" ✅"):
-        updated_text = original_text + " ✅"
-    else:
-        updated_text = original_text
+    # Убираем галочку, если она уже есть (на случай повторного нажатия)
+    if original_text.endswith(" ✅"):
+        original_text = original_text[:-2].rstrip()
     
-    # Редактируем сообщение, добавляя галочку и убирая кнопку
+    # Добавляем галочку в конец текста
+    updated_text = original_text + " ✅"
+    
+    # Редактируем сообщение, на котором была кнопка
+    # Это исходное сообщение от Bitrix (если кнопка была добавлена к нему)
+    # или новое сообщение (если исходное не удалось отредактировать)
     try:
         if callback_query.message.text:
             # Для текстовых сообщений
@@ -129,6 +116,7 @@ async def process_done(callback_query: types.CallbackQuery):
                 message_id=message_id,
                 reply_markup=None  # Убираем кнопку
             )
+            logging.info(f"Успешно отредактировано сообщение {message_id}, добавлена галочка, убрана кнопка")
         elif callback_query.message.caption:
             # Для сообщений с подписью
             await bot.edit_message_caption(
@@ -137,8 +125,9 @@ async def process_done(callback_query: types.CallbackQuery):
                 caption=updated_text,
                 reply_markup=None  # Убираем кнопку
             )
+            logging.info(f"Успешно отредактирована подпись сообщения {message_id}, добавлена галочка, убрана кнопка")
     except Exception as e:
-        logging.error(f"Ошибка при редактировании сообщения: {e}")
+        logging.error(f"Ошибка при редактировании сообщения {message_id}: {e}")
         await callback_query.answer("Ошибка при обработке сообщения", show_alert=True)
         return
     
@@ -158,10 +147,12 @@ async def webhook_handler(request):
         update = types.Update(**update_data)
         
         # Устанавливаем текущий экземпляр бота в контекст (нужно для aiogram 2.x)
+        # Это должно быть сделано перед обработкой обновления в каждом запросе
         Bot.set_current(bot)
         
         # Обрабатываем обновление
         await dp.process_update(update)
+        
         return web.Response(text='{"ok":true}')
     except Exception as e:
         logging.error(f"Ошибка при обработке webhook: {e}")
