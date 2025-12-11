@@ -1,0 +1,273 @@
+2025-12-11T10:05:24.75695132Z ==> Cloning from https://github.com/papabig2004/facigrnotifications
+2025-12-11T10:05:25.283942481Z ==> Checking out commit 371fb3ff5026b2bcd1dcfd3f4d1f5b9a238bdc2f in branch main
+2025-12-11T10:05:28.705418964Z ==> Installing Python version 3.13.4...
+2025-12-11T10:05:38.452462883Z ==> Using Python version 3.13.4 (default)
+2025-12-11T10:05:38.476289107Z ==> Docs on specifying a Python version: https://render.com/docs/python-version
+2025-12-11T10:05:41.652163354Z ==> Using Poetry version 2.1.3 (default)
+2025-12-11T10:05:41.742272604Z ==> Docs on specifying a Poetry version: https://render.com/docs/poetry-version
+2025-12-11T10:05:41.838378725Z ==> Running build command 'pip install -r requirements.txt'...
+2025-12-11T10:05:42.579065023Z Collecting aiogram==2.21 (from -r requirements.txt (line 1))
+2025-12-11T10:05:42.622604618Z   Downloading aiogram-2.21-py3-none-any.whl.metadata (3.6 kB)
+2025-12-11T10:05:43.043096095Z Collecting gunicorn==20.1.0 (from -r requirements.txt (line 2))
+2025-12-11T10:05:43.047327862Z   Downloading gunicorn-20.1.0-py3-none-any.whl.metadata (3.8 kB)
+2025-12-11T10:05:44.015893977Z Collecting aiohttp<3.9.0,>=3.8.0 (from aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:44.021164273Z   Downloading aiohttp-3.8.6.tar.gz (7.4 MB)
+2025-12-11T10:05:44.592900736Z      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.4/7.4 MB 12.9 MB/s eta 0:00:00
+2025-12-11T10:05:44.769933048Z   Installing build dependencies: started
+2025-12-11T10:05:46.778804615Z   Installing build dependencies: finished with status 'done'
+2025-12-11T10:05:46.779527029Z   Getting requirements to build wheel: started
+2025-12-11T10:05:47.438660034Z   Getting requirements to build wheel: finished with status 'done'
+2025-12-11T10:05:47.439722053Z   Preparing metadata (pyproject.toml): started
+2025-12-11T10:05:47.673140918Z   Preparing metadata (pyproject.toml): finished with status 'done'
+2025-12-11T10:05:47.985583986Z Collecting Babel<2.10.0,>=2.9.1 (from aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:47.993064565Z   Downloading Babel-2.9.1-py2.py3-none-any.whl.metadata (1.2 kB)
+2025-12-11T10:05:48.588340756Z Collecting certifi>=2021.10.8 (from aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:48.592515991Z   Downloading certifi-2025.11.12-py3-none-any.whl.metadata (2.5 kB)
+2025-12-11T10:05:48.94310051Z Collecting setuptools>=3.0 (from gunicorn==20.1.0->-r requirements.txt (line 2))
+2025-12-11T10:05:48.944500676Z   Using cached setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+2025-12-11T10:05:49.08179856Z Collecting attrs>=17.3.0 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:49.086458158Z   Downloading attrs-25.4.0-py3-none-any.whl.metadata (10 kB)
+2025-12-11T10:05:49.382221985Z Collecting charset-normalizer<4.0,>=2.0 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:49.388758721Z   Downloading charset_normalizer-3.4.4-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (37 kB)
+2025-12-11T10:05:49.846417391Z Collecting multidict<7.0,>=4.5 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:49.877334186Z   Downloading multidict-6.7.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+2025-12-11T10:05:50.247240337Z Collecting async_timeout<5.0,>=4.0.0a3 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:50.252382437Z   Downloading async_timeout-4.0.3-py3-none-any.whl.metadata (4.2 kB)
+2025-12-11T10:05:50.787311567Z Collecting yarl<2.0,>=1.0 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:50.792060759Z   Downloading yarl-1.22.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (75 kB)
+2025-12-11T10:05:50.915430443Z Collecting frozenlist>=1.1.1 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:50.920055379Z   Downloading frozenlist-1.8.0-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)
+2025-12-11T10:05:50.950799045Z Collecting aiosignal>=1.1.2 (from aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:50.954696497Z   Downloading aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+2025-12-11T10:05:51.006233094Z Collecting pytz>=2015.7 (from Babel<2.10.0,>=2.9.1->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:51.010070574Z   Downloading pytz-2025.2-py2.py3-none-any.whl.metadata (22 kB)
+2025-12-11T10:05:51.043103817Z Collecting idna>=2.0 (from yarl<2.0,>=1.0->aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:51.047096874Z   Downloading idna-3.11-py3-none-any.whl.metadata (8.4 kB)
+2025-12-11T10:05:51.123094844Z Collecting propcache>=0.2.1 (from yarl<2.0,>=1.0->aiohttp<3.9.0,>=3.8.0->aiogram==2.21->-r requirements.txt (line 1))
+2025-12-11T10:05:51.127218186Z   Downloading propcache-0.4.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (13 kB)
+2025-12-11T10:05:51.153092115Z Downloading aiogram-2.21-py3-none-any.whl (195 kB)
+2025-12-11T10:05:51.168961157Z Downloading gunicorn-20.1.0-py3-none-any.whl (79 kB)
+2025-12-11T10:05:51.183745217Z Downloading async_timeout-4.0.3-py3-none-any.whl (5.7 kB)
+2025-12-11T10:05:51.201528118Z Downloading Babel-2.9.1-py2.py3-none-any.whl (8.8 MB)
+2025-12-11T10:05:51.27221608Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.8/8.8 MB 126.1 MB/s eta 0:00:00
+2025-12-11T10:05:51.276588485Z Downloading charset_normalizer-3.4.4-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (153 kB)
+2025-12-11T10:05:51.290207981Z Downloading multidict-6.7.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+2025-12-11T10:05:51.303535923Z Downloading yarl-1.22.0-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (377 kB)
+2025-12-11T10:05:51.317070736Z Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+2025-12-11T10:05:51.328051909Z Downloading attrs-25.4.0-py3-none-any.whl (67 kB)
+2025-12-11T10:05:51.33920742Z Downloading certifi-2025.11.12-py3-none-any.whl (159 kB)
+2025-12-11T10:05:51.35312055Z Downloading frozenlist-1.8.0-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (234 kB)
+2025-12-11T10:05:51.366214751Z Downloading idna-3.11-py3-none-any.whl (71 kB)
+2025-12-11T10:05:51.378397731Z Downloading propcache-0.4.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (204 kB)
+2025-12-11T10:05:51.392993253Z Downloading pytz-2025.2-py2.py3-none-any.whl (509 kB)
+2025-12-11T10:05:51.406080664Z Using cached setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+2025-12-11T10:05:51.437059221Z Building wheels for collected packages: aiohttp
+2025-12-11T10:05:51.437970354Z   Building wheel for aiohttp (pyproject.toml): started
+2025-12-11T10:05:51.781159296Z   Building wheel for aiohttp (pyproject.toml): finished with status 'error'
+2025-12-11T10:05:51.795821611Z   error: subprocess-exited-with-error
+2025-12-11T10:05:51.795836042Z   
+2025-12-11T10:05:51.795839412Z   × Building wheel for aiohttp (pyproject.toml) did not run successfully.
+2025-12-11T10:05:51.795842242Z   │ exit code: 1
+2025-12-11T10:05:51.795844642Z   ╰─> [191 lines of output]
+2025-12-11T10:05:51.795847013Z       *********************
+2025-12-11T10:05:51.795849383Z       * Accelerated build *
+2025-12-11T10:05:51.795852263Z       *********************
+2025-12-11T10:05:51.795855273Z       /tmp/pip-build-env-v09lwtn3/overlay/lib/python3.13/site-packages/setuptools/dist.py:759: SetuptoolsDeprecationWarning: License classifiers are deprecated.
+2025-12-11T10:05:51.795857823Z       !!
+2025-12-11T10:05:51.795860313Z       
+2025-12-11T10:05:51.795863323Z               ********************************************************************************
+2025-12-11T10:05:51.795866114Z               Please consider removing the following classifiers in favor of a SPDX license expression:
+2025-12-11T10:05:51.795868583Z       
+2025-12-11T10:05:51.795870984Z               License :: OSI Approved :: Apache Software License
+2025-12-11T10:05:51.795873284Z       
+2025-12-11T10:05:51.795875674Z               See https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#license for details.
+2025-12-11T10:05:51.795878454Z               ********************************************************************************
+2025-12-11T10:05:51.795880734Z       
+2025-12-11T10:05:51.795883154Z       !!
+2025-12-11T10:05:51.795885534Z         self._finalize_license_expression()
+2025-12-11T10:05:51.795888015Z       running bdist_wheel
+2025-12-11T10:05:51.795890424Z       running build
+2025-12-11T10:05:51.795892855Z       running build_py
+2025-12-11T10:05:51.795895265Z       creating build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795897795Z       copying aiohttp/http_websocket.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795900335Z       copying aiohttp/http_writer.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795902725Z       copying aiohttp/streams.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795905105Z       copying aiohttp/http_exceptions.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795907555Z       copying aiohttp/resolver.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795910105Z       copying aiohttp/client.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795912566Z       copying aiohttp/base_protocol.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795914896Z       copying aiohttp/web_response.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795917226Z       copying aiohttp/locks.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795919536Z       copying aiohttp/pytest_plugin.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795921926Z       copying aiohttp/web_urldispatcher.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795937947Z       copying aiohttp/web_runner.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795940847Z       copying aiohttp/client_proto.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795943267Z       copying aiohttp/multipart.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795945497Z       copying aiohttp/payload_streamer.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795947847Z       copying aiohttp/tcp_helpers.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795950237Z       copying aiohttp/web_middlewares.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795952638Z       copying aiohttp/client_reqrep.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795955038Z       copying aiohttp/tracing.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795957378Z       copying aiohttp/__init__.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795959718Z       copying aiohttp/web_routedef.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795962118Z       copying aiohttp/cookiejar.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795964468Z       copying aiohttp/http.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795966818Z       copying aiohttp/worker.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795969228Z       copying aiohttp/web_server.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795971788Z       copying aiohttp/web_exceptions.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795974159Z       copying aiohttp/payload.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795976429Z       copying aiohttp/helpers.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795978919Z       copying aiohttp/log.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795981419Z       copying aiohttp/abc.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795983919Z       copying aiohttp/web_protocol.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795986209Z       copying aiohttp/web.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795988649Z       copying aiohttp/client_exceptions.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795991119Z       copying aiohttp/web_request.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795993569Z       copying aiohttp/web_log.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.795996Z       copying aiohttp/hdrs.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.79600703Z       copying aiohttp/client_ws.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.79600963Z       copying aiohttp/http_parser.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.79601203Z       copying aiohttp/formdata.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.79601451Z       copying aiohttp/web_fileresponse.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.79601693Z       copying aiohttp/web_ws.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796019451Z       copying aiohttp/typedefs.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796021771Z       copying aiohttp/web_app.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796024141Z       copying aiohttp/test_utils.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796026421Z       copying aiohttp/connector.py -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796032821Z       running egg_info
+2025-12-11T10:05:51.796035271Z       writing aiohttp.egg-info/PKG-INFO
+2025-12-11T10:05:51.796037682Z       writing dependency_links to aiohttp.egg-info/dependency_links.txt
+2025-12-11T10:05:51.796040211Z       writing requirements to aiohttp.egg-info/requires.txt
+2025-12-11T10:05:51.796042552Z       writing top-level names to aiohttp.egg-info/top_level.txt
+2025-12-11T10:05:51.796044802Z       reading manifest file 'aiohttp.egg-info/SOURCES.txt'
+2025-12-11T10:05:51.796047162Z       reading manifest template 'MANIFEST.in'
+2025-12-11T10:05:51.796049582Z       warning: no files found matching 'aiohttp' anywhere in distribution
+2025-12-11T10:05:51.796051972Z       warning: no previously-included files matching '*.pyc' found anywhere in distribution
+2025-12-11T10:05:51.796054502Z       warning: no previously-included files matching '*.pyd' found anywhere in distribution
+2025-12-11T10:05:51.796056882Z       warning: no previously-included files matching '*.so' found anywhere in distribution
+2025-12-11T10:05:51.796059263Z       warning: no previously-included files matching '*.lib' found anywhere in distribution
+2025-12-11T10:05:51.796061652Z       warning: no previously-included files matching '*.dll' found anywhere in distribution
+2025-12-11T10:05:51.796063983Z       warning: no previously-included files matching '*.a' found anywhere in distribution
+2025-12-11T10:05:51.796066483Z       warning: no previously-included files matching '*.obj' found anywhere in distribution
+2025-12-11T10:05:51.796068903Z       warning: no previously-included files found matching 'aiohttp/*.html'
+2025-12-11T10:05:51.796071243Z       no previously-included directories found matching 'docs/_build'
+2025-12-11T10:05:51.796073543Z       adding license file 'LICENSE.txt'
+2025-12-11T10:05:51.796075983Z       writing manifest file 'aiohttp.egg-info/SOURCES.txt'
+2025-12-11T10:05:51.796078343Z       copying aiohttp/_cparser.pxd -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796080604Z       copying aiohttp/_find_header.pxd -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796083084Z       copying aiohttp/_headers.pxi -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796089444Z       copying aiohttp/_helpers.pyi -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796092004Z       copying aiohttp/_helpers.pyx -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796094344Z       copying aiohttp/_http_parser.pyx -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796096704Z       copying aiohttp/_http_writer.pyx -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796099064Z       copying aiohttp/_websocket.pyx -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796101574Z       copying aiohttp/py.typed -> build/lib.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796103974Z       creating build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796107955Z       copying aiohttp/.hash/_cparser.pxd.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796110555Z       copying aiohttp/.hash/_find_header.pxd.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796113095Z       copying aiohttp/.hash/_helpers.pyi.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796115475Z       copying aiohttp/.hash/_helpers.pyx.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796117995Z       copying aiohttp/.hash/_http_parser.pyx.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796120355Z       copying aiohttp/.hash/_http_writer.pyx.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796126086Z       copying aiohttp/.hash/_websocket.pyx.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796128526Z       copying aiohttp/.hash/hdrs.py.hash -> build/lib.linux-x86_64-cpython-313/aiohttp/.hash
+2025-12-11T10:05:51.796130876Z       running build_ext
+2025-12-11T10:05:51.796133386Z       building 'aiohttp._websocket' extension
+2025-12-11T10:05:51.796135646Z       creating build/temp.linux-x86_64-cpython-313/aiohttp
+2025-12-11T10:05:51.796138546Z       gcc -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O3 -Wall -fPIC -I/opt/render/project/src/.venv/include -I/opt/render/project/python/Python-3.13.4/include/python3.13 -c aiohttp/_websocket.c -o build/temp.linux-x86_64-cpython-313/aiohttp/_websocket.o
+2025-12-11T10:05:51.796147397Z       aiohttp/_websocket.c:826:1: warning: ‘Py_UNICODE’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796150157Z         826 | static CYTHON_INLINE size_t __Pyx_Py_UNICODE_strlen(const Py_UNICODE *u) {
+2025-12-11T10:05:51.796152597Z             | ^~~~~~
+2025-12-11T10:05:51.796155257Z       aiohttp/_websocket.c: In function ‘__Pyx_Py_UNICODE_strlen’:
+2025-12-11T10:05:51.796157807Z       aiohttp/_websocket.c:827:5: warning: ‘Py_UNICODE’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796160197Z         827 |     const Py_UNICODE *u_end = u;
+2025-12-11T10:05:51.796162567Z             |     ^~~~~
+2025-12-11T10:05:51.796165057Z       aiohttp/_websocket.c: In function ‘__pyx_pf_7aiohttp_10_websocket__websocket_mask_cython’:
+2025-12-11T10:05:51.796167368Z       aiohttp/_websocket.c:1475:3: warning: ‘Py_OptimizeFlag’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796169718Z        1475 |   if (unlikely(!Py_OptimizeFlag)) {
+2025-12-11T10:05:51.796172028Z             |   ^~
+2025-12-11T10:05:51.796174428Z       In file included from /opt/render/project/python/Python-3.13.4/include/python3.13/Python.h:76,
+2025-12-11T10:05:51.796176738Z                        from aiohttp/_websocket.c:6:
+2025-12-11T10:05:51.796179088Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/pydebug.h:13:37: note: declared here
+2025-12-11T10:05:51.796181368Z          13 | Py_DEPRECATED(3.12) PyAPI_DATA(int) Py_OptimizeFlag;
+2025-12-11T10:05:51.796183788Z             |                                     ^~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796186169Z       aiohttp/_websocket.c: In function ‘__Pyx_get_tp_dict_version’:
+2025-12-11T10:05:51.796189569Z       aiohttp/_websocket.c:2680:5: warning: ‘ma_version_tag’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796191929Z        2680 |     return likely(dict) ? __PYX_GET_DICT_VERSION(dict) : 0;
+2025-12-11T10:05:51.796194309Z             |     ^~~~~~
+2025-12-11T10:05:51.796196569Z       In file included from /opt/render/project/python/Python-3.13.4/include/python3.13/dictobject.h:101,
+2025-12-11T10:05:51.796199039Z                        from /opt/render/project/python/Python-3.13.4/include/python3.13/Python.h:90:
+2025-12-11T10:05:51.796202149Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/dictobject.h:25:34: note: declared here
+2025-12-11T10:05:51.796204469Z          25 |     Py_DEPRECATED(3.12) uint64_t ma_version_tag;
+2025-12-11T10:05:51.796206849Z             |                                  ^~~~~~~~~~~~~~
+2025-12-11T10:05:51.79620927Z       aiohttp/_websocket.c: In function ‘__Pyx_get_object_dict_version’:
+2025-12-11T10:05:51.79621157Z       aiohttp/_websocket.c:2692:5: warning: ‘ma_version_tag’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.79621387Z        2692 |     return (dictptr && *dictptr) ? __PYX_GET_DICT_VERSION(*dictptr) : 0;
+2025-12-11T10:05:51.79621978Z             |     ^~~~~~
+2025-12-11T10:05:51.7962222Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/dictobject.h:25:34: note: declared here
+2025-12-11T10:05:51.79622465Z          25 |     Py_DEPRECATED(3.12) uint64_t ma_version_tag;
+2025-12-11T10:05:51.79622686Z             |                                  ^~~~~~~~~~~~~~
+2025-12-11T10:05:51.79622928Z       aiohttp/_websocket.c: In function ‘__Pyx_object_dict_version_matches’:
+2025-12-11T10:05:51.796231731Z       aiohttp/_websocket.c:2696:5: warning: ‘ma_version_tag’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796234121Z        2696 |     if (unlikely(!dict) || unlikely(tp_dict_version != __PYX_GET_DICT_VERSION(dict)))
+2025-12-11T10:05:51.796236491Z             |     ^~
+2025-12-11T10:05:51.796238991Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/dictobject.h:25:34: note: declared here
+2025-12-11T10:05:51.796241381Z          25 |     Py_DEPRECATED(3.12) uint64_t ma_version_tag;
+2025-12-11T10:05:51.796243711Z             |                                  ^~~~~~~~~~~~~~
+2025-12-11T10:05:51.796246031Z       aiohttp/_websocket.c: In function ‘__Pyx_CLineForTraceback’:
+2025-12-11T10:05:51.796248891Z       aiohttp/_websocket.c:2741:9: warning: ‘ma_version_tag’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796251232Z        2741 |         __PYX_PY_DICT_LOOKUP_IF_MODIFIED(
+2025-12-11T10:05:51.796253601Z             |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796255792Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/dictobject.h:25:34: note: declared here
+2025-12-11T10:05:51.796258192Z          25 |     Py_DEPRECATED(3.12) uint64_t ma_version_tag;
+2025-12-11T10:05:51.796260552Z             |                                  ^~~~~~~~~~~~~~
+2025-12-11T10:05:51.796262962Z       aiohttp/_websocket.c:2741:9: warning: ‘ma_version_tag’ is deprecated [-Wdeprecated-declarations]
+2025-12-11T10:05:51.796265322Z        2741 |         __PYX_PY_DICT_LOOKUP_IF_MODIFIED(
+2025-12-11T10:05:51.796267732Z             |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796270032Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/dictobject.h:25:34: note: declared here
+2025-12-11T10:05:51.796272362Z          25 |     Py_DEPRECATED(3.12) uint64_t ma_version_tag;
+2025-12-11T10:05:51.796274642Z             |                                  ^~~~~~~~~~~~~~
+2025-12-11T10:05:51.796277003Z       aiohttp/_websocket.c: In function ‘__Pyx_PyInt_As_long’:
+2025-12-11T10:05:51.796288283Z       aiohttp/_websocket.c:3042:53: error: ‘PyLongObject’ {aka ‘struct _longobject’} has no member named ‘ob_digit’
+2025-12-11T10:05:51.796486872Z        3042 |             const digit* digits = ((PyLongObject*)x)->ob_digit;
+2025-12-11T10:05:51.796491653Z             |                                                     ^~
+2025-12-11T10:05:51.796494283Z       aiohttp/_websocket.c:3097:53: error: ‘PyLongObject’ {aka ‘struct _longobject’} has no member named ‘ob_digit’
+2025-12-11T10:05:51.796496673Z        3097 |             const digit* digits = ((PyLongObject*)x)->ob_digit;
+2025-12-11T10:05:51.796499153Z             |                                                     ^~
+2025-12-11T10:05:51.796501833Z       aiohttp/_websocket.c:3183:27: error: too few arguments to function ‘_PyLong_AsByteArray’
+2025-12-11T10:05:51.796504213Z        3183 |                 int ret = _PyLong_AsByteArray((PyLongObject *)v,
+2025-12-11T10:05:51.796506593Z             |                           ^~~~~~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796509144Z       In file included from /opt/render/project/python/Python-3.13.4/include/python3.13/longobject.h:107,
+2025-12-11T10:05:51.796517604Z                        from /opt/render/project/python/Python-3.13.4/include/python3.13/Python.h:81:
+2025-12-11T10:05:51.796520204Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/longobject.h:111:17: note: declared here
+2025-12-11T10:05:51.796524064Z         111 | PyAPI_FUNC(int) _PyLong_AsByteArray(PyLongObject* v,
+2025-12-11T10:05:51.796528194Z             |                 ^~~~~~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796530674Z       aiohttp/_websocket.c: In function ‘__Pyx_PyInt_As_int’:
+2025-12-11T10:05:51.796533225Z       aiohttp/_websocket.c:3238:53: error: ‘PyLongObject’ {aka ‘struct _longobject’} has no member named ‘ob_digit’
+2025-12-11T10:05:51.796535735Z        3238 |             const digit* digits = ((PyLongObject*)x)->ob_digit;
+2025-12-11T10:05:51.796537975Z             |                                                     ^~
+2025-12-11T10:05:51.796540405Z       aiohttp/_websocket.c:3293:53: error: ‘PyLongObject’ {aka ‘struct _longobject’} has no member named ‘ob_digit’
+2025-12-11T10:05:51.796542815Z        3293 |             const digit* digits = ((PyLongObject*)x)->ob_digit;
+2025-12-11T10:05:51.796545175Z             |                                                     ^~
+2025-12-11T10:05:51.796547725Z       aiohttp/_websocket.c:3379:27: error: too few arguments to function ‘_PyLong_AsByteArray’
+2025-12-11T10:05:51.796550015Z        3379 |                 int ret = _PyLong_AsByteArray((PyLongObject *)v,
+2025-12-11T10:05:51.796552535Z             |                           ^~~~~~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796554826Z       /opt/render/project/python/Python-3.13.4/include/python3.13/cpython/longobject.h:111:17: note: declared here
+2025-12-11T10:05:51.796557116Z         111 | PyAPI_FUNC(int) _PyLong_AsByteArray(PyLongObject* v,
+2025-12-11T10:05:51.796559436Z             |                 ^~~~~~~~~~~~~~~~~~~
+2025-12-11T10:05:51.796561866Z       aiohttp/_websocket.c: In function ‘__Pyx_PyIndex_AsSsize_t’:
+2025-12-11T10:05:51.796564286Z       aiohttp/_websocket.c:3744:45: error: ‘PyLongObject’ {aka ‘struct _longobject’} has no member named ‘ob_digit’
+2025-12-11T10:05:51.796566636Z        3744 |     const digit* digits = ((PyLongObject*)b)->ob_digit;
+2025-12-11T10:05:51.796568926Z             |                                             ^~
+2025-12-11T10:05:51.796571176Z       error: command '/usr/bin/gcc' failed with exit code 1
+2025-12-11T10:05:51.796573576Z       [end of output]
+2025-12-11T10:05:51.796575987Z   
+2025-12-11T10:05:51.796578487Z   note: This error originates from a subprocess, and is likely not a problem with pip.
+2025-12-11T10:05:51.796591897Z   ERROR: Failed building wheel for aiohttp
+2025-12-11T10:05:51.796881761Z Failed to build aiohttp
+2025-12-11T10:05:51.893312156Z 
+2025-12-11T10:05:51.893334677Z [notice] A new release of pip is available: 25.1.1 -> 25.3
+2025-12-11T10:05:51.893337797Z [notice] To update, run: pip install --upgrade pip
+2025-12-11T10:05:51.89383351Z ERROR: Failed to build installable wheels for some pyproject.toml based projects (aiohttp)
+2025-12-11T10:05:52.30268562Z ==> Build failed 😞
+2025-12-11T10:05:52.302701111Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
