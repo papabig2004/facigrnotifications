@@ -1,0 +1,2 @@
+aiogram==2.21
+gunicorn==20.1.0
