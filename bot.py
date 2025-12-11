@@ -163,22 +163,33 @@ async def process_done(callback_query: types.CallbackQuery):
 
 # Множество для отслеживания обработанных сообщений (чтобы не обрабатывать повторно)
 processed_messages = set()
-# Последний проверенный update_id (чтобы проверять только новые сообщения)
-last_checked_update_id = 0
+# Последний проверенный message_id (начинаем с текущего времени как приблизительного значения)
+last_checked_message_id = 0
 
 async def check_and_add_buttons():
     """Периодически проверяет последние сообщения в чате и добавляет кнопки к тем, у которых их нет"""
-    global processed_messages, last_checked_update_id
+    global processed_messages, last_checked_message_id
+    
+    # Проверяем, активен ли webhook
+    try:
+        webhook_info = await bot.get_webhook_info()
+        if webhook_info.url:
+            # Если webhook активен, не используем getUpdates (будет ошибка)
+            # Вместо этого полагаемся на обработку через webhook в handle_message
+            logging.debug(f"[check_and_add_buttons] Webhook активен ({webhook_info.url}), пропускаем проверку через getUpdates")
+            return
+    except Exception as e:
+        logging.warning(f"[check_and_add_buttons] Не удалось проверить webhook: {e}")
     
     try:
-        # Получаем последние обновления (но не обрабатываем их через диспетчер)
+        # Получаем последние обновления (только если webhook не активен)
         # Используем offset, чтобы получать только новые сообщения
-        updates = await bot.get_updates(offset=last_checked_update_id + 1, limit=10, timeout=1)
+        updates = await bot.get_updates(offset=last_checked_message_id + 1, limit=10, timeout=1)
         
         for update in updates:
             # Обновляем последний проверенный update_id
-            if update.update_id > last_checked_update_id:
-                last_checked_update_id = update.update_id
+            if hasattr(update, 'update_id') and update.update_id > last_checked_message_id:
+                last_checked_message_id = update.update_id
             
             if update.message and update.message.chat.id == CHAT_ID:
                 message = update.message
@@ -241,7 +252,11 @@ async def check_and_add_buttons():
                     except Exception as e:
                         logging.warning(f"[check_and_add_buttons] Не удалось добавить кнопку к сообщению {message_id}: {e}")
     except Exception as e:
-        logging.error(f"[check_and_add_buttons] Ошибка при проверке сообщений: {e}")
+        # Игнорируем ошибку "webhook is active" - это нормально
+        if "webhook" in str(e).lower() or "getupdates" in str(e).lower():
+            logging.debug(f"[check_and_add_buttons] Webhook активен, пропускаем проверку через getUpdates")
+        else:
+            logging.error(f"[check_and_add_buttons] Ошибка при проверке сообщений: {e}")
 
 async def periodic_check():
     """Периодически проверяет сообщения в чате"""
