@@ -30,23 +30,24 @@ async def start(message: types.Message):
 # Функция для обработки всех типов сообщений
 @dp.message_handler(content_types=types.ContentTypes.ANY)
 async def handle_message(message: types.Message):
-    # Логируем получение сообщения
-    logging.info(f"Получено сообщение: message_id={message.message_id}, chat_id={message.chat.id}, "
+    # Логируем получение сообщения ВСЕГДА (даже если не обрабатываем)
+    logging.info(f"[handle_message] Получено сообщение: message_id={message.message_id}, chat_id={message.chat.id}, "
                  f"from_user={message.from_user.id if message.from_user else None}, "
                  f"is_bot={message.from_user.is_bot if message.from_user else None}, "
-                 f"content_type={message.content_type}")
+                 f"content_type={message.content_type}, "
+                 f"text_length={len(message.text) if message.text else 0}")
     
     # ВАЖНО: Обрабатываем ТОЛЬКО сообщения от бота (от Bitrix)
     # Bitrix отправляет сообщения от имени бота, поэтому проверяем is_bot
     if not message.from_user:
-        logging.warning(f"Сообщение без from_user: message_id={message.message_id}")
+        logging.warning(f"[handle_message] Сообщение без from_user: message_id={message.message_id}")
         return
     
     if not message.from_user.is_bot:
-        logging.info(f"Пропущено сообщение от пользователя (не от бота): message_id={message.message_id}, from_user={message.from_user.id}")
+        logging.info(f"[handle_message] Пропущено сообщение от пользователя (не от бота): message_id={message.message_id}, from_user={message.from_user.id}, username={message.from_user.username}")
         return
     
-    logging.info(f"Обрабатываем сообщение от бота (Bitrix): message_id={message.message_id}, bot_id={message.from_user.id}")
+    logging.info(f"[handle_message] Обрабатываем сообщение от бота (Bitrix): message_id={message.message_id}, bot_id={message.from_user.id}, bot_username={message.from_user.username}")
     
     # Получаем текст сообщения
     message_text = message.text or message.caption or ""
