@@ -12,6 +12,8 @@ from aiogram.dispatcher.middlewares import BaseMiddleware
 
 # Токен вашего бота
 API_TOKEN = os.getenv("API_TOKEN")
+# ID чата для проверки сообщений (из настроек Bitrix)
+CHAT_ID = int(os.getenv("CHAT_ID", "447824223"))
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -159,6 +161,99 @@ async def process_done(callback_query: types.CallbackQuery):
     # Уведомление о нажатии
     await callback_query.answer("Сообщение помечено как обработано!")
 
+# Множество для отслеживания обработанных сообщений (чтобы не обрабатывать повторно)
+processed_messages = set()
+# Последний проверенный update_id (чтобы проверять только новые сообщения)
+last_checked_update_id = 0
+
+async def check_and_add_buttons():
+    """Периодически проверяет последние сообщения в чате и добавляет кнопки к тем, у которых их нет"""
+    global processed_messages, last_checked_update_id
+    
+    try:
+        # Получаем последние обновления (но не обрабатываем их через диспетчер)
+        # Используем offset, чтобы получать только новые сообщения
+        updates = await bot.get_updates(offset=last_checked_update_id + 1, limit=10, timeout=1)
+        
+        for update in updates:
+            # Обновляем последний проверенный update_id
+            if update.update_id > last_checked_update_id:
+                last_checked_update_id = update.update_id
+            
+            if update.message and update.message.chat.id == CHAT_ID:
+                message = update.message
+                message_id = message.message_id
+                
+                # Пропускаем, если уже обработали
+                if message_id in processed_messages:
+                    continue
+                
+                # Пропускаем, если сообщение от пользователя (не от бота)
+                if not message.from_user or not message.from_user.is_bot:
+                    continue
+                
+                # Пропускаем команды
+                message_text = message.text or message.caption or ""
+                if message_text.startswith('/'):
+                    continue
+                
+                # Пропускаем, если нет текста
+                if not message_text:
+                    continue
+                
+                # Проверяем, есть ли уже кнопка у сообщения
+                has_button = False
+                if message.reply_markup and message.reply_markup.inline_keyboard:
+                    for row in message.reply_markup.inline_keyboard:
+                        for button in row:
+                            if button.text == "Обработано":
+                                has_button = True
+                                break
+                        if has_button:
+                            break
+                
+                # Если кнопки нет - добавляем
+                if not has_button:
+                    logging.info(f"[check_and_add_buttons] Добавляем кнопку к сообщению {message_id}")
+                    markup = InlineKeyboardMarkup()
+                    markup.add(InlineKeyboardButton("Обработано", callback_data=f"done_{message_id}"))
+                    
+                    try:
+                        if message.text:
+                            await bot.edit_message_text(
+                                message_text,
+                                chat_id=CHAT_ID,
+                                message_id=message_id,
+                                reply_markup=markup
+                            )
+                            logging.info(f"[check_and_add_buttons] Успешно добавлена кнопка к сообщению {message_id}")
+                        elif message.caption:
+                            await bot.edit_message_caption(
+                                chat_id=CHAT_ID,
+                                message_id=message_id,
+                                caption=message_text,
+                                reply_markup=markup
+                            )
+                            logging.info(f"[check_and_add_buttons] Успешно добавлена кнопка к сообщению {message_id}")
+                        
+                        # Помечаем как обработанное
+                        processed_messages.add(message_id)
+                    except Exception as e:
+                        logging.warning(f"[check_and_add_buttons] Не удалось добавить кнопку к сообщению {message_id}: {e}")
+    except Exception as e:
+        logging.error(f"[check_and_add_buttons] Ошибка при проверке сообщений: {e}")
+
+async def periodic_check():
+    """Периодически проверяет сообщения в чате"""
+    while True:
+        try:
+            await check_and_add_buttons()
+            # Проверяем каждые 5 секунд
+            await asyncio.sleep(5)
+        except Exception as e:
+            logging.error(f"[periodic_check] Ошибка: {e}")
+            await asyncio.sleep(5)
+
 # HTTP-сервер для webhook и health check
 
 async def health_check(request):
@@ -233,6 +328,10 @@ if __name__ == '__main__':
             await bot.set_webhook(webhook_url + '/webhook')
             logging.info("Webhook установлен успешно")
             
+            # Запускаем периодическую проверку сообщений в фоне
+            asyncio.create_task(periodic_check())
+            logging.info("Запущена периодическая проверка сообщений (каждые 5 секунд)")
+            
             # Держим программу запущенной
             try:
                 while True:
@@ -279,6 +378,19 @@ if __name__ == '__main__':
         
         health_thread = threading.Thread(target=start_health_server, daemon=True)
         health_thread.start()
+        
+        # Запускаем периодическую проверку сообщений в отдельном потоке
+        async def run_periodic_check():
+            await periodic_check()
+        
+        def start_periodic_check_thread():
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(run_periodic_check())
+        
+        periodic_thread = threading.Thread(target=start_periodic_check_thread, daemon=True)
+        periodic_thread.start()
+        logging.info("Запущена периодическая проверка сообщений (каждые 5 секунд)")
         
         # Запуск бота с polling
         executor.start_polling(
