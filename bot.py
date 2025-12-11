@@ -156,10 +156,17 @@ async def webhook_handler(request):
     try:
         update_data = await request.json()
         update = types.Update(**update_data)
+        
+        # Устанавливаем текущий экземпляр бота в контекст (нужно для aiogram 2.x)
+        Bot.set_current(bot)
+        
+        # Обрабатываем обновление
         await dp.process_update(update)
         return web.Response(text='{"ok":true}')
     except Exception as e:
         logging.error(f"Ошибка при обработке webhook: {e}")
+        import traceback
+        logging.error(traceback.format_exc())
         return web.Response(text='{"ok":false}', status=500)
 
 def create_webhook_app():
@@ -213,6 +220,19 @@ if __name__ == '__main__':
         # Используем polling (если webhook не настроен)
         logging.info("Используется polling (webhook не настроен)")
         logging.warning("ВНИМАНИЕ: Если Bitrix тоже использует polling, будет конфликт!")
+        
+        # Удаляем существующий webhook перед использованием polling
+        async def delete_existing_webhook():
+            try:
+                webhook_info = await bot.get_webhook_info()
+                if webhook_info.url:
+                    logging.info(f"Найден активный webhook: {webhook_info.url}. Удаляем...")
+                    await bot.delete_webhook()
+                    logging.info("Webhook удален успешно")
+            except Exception as e:
+                logging.warning(f"Ошибка при проверке/удалении webhook: {e}")
+        
+        asyncio.run(delete_existing_webhook())
         
         # Запускаем health check сервер в фоне
         class HealthCheckHandler(BaseHTTPRequestHandler):
